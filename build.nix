@@ -7,6 +7,7 @@ let
     openssl
     opusTools
     qrencode
+    snowflake
     socat
     sox
     tor
@@ -28,10 +29,16 @@ pkgs.stdenv.mkDerivation {
     ./patches/home-dir.patch
   ];
   installPhase = ''
-    mkdir -p $out/bin
+    mkdir -p $out/{bin,lib}
+
+    # Snowflake is `client` instead of `snowflake-client`
+    ln -s ${pkgs.snowflake}/bin/client $out/lib/snowflake-client
+
     chmod u+x terminalphone.sh
     cp terminalphone.sh $out/bin/terminalphone.sh
+
     wrapProgram $out/bin/terminalphone.sh \
-      --prefix PATH : ${pkgs.lib.makeBinPath buildInputs}
+      --prefix PATH : ${pkgs.lib.makeBinPath buildInputs} \
+      --prefix PATH : $out/lib
   '';
 }
