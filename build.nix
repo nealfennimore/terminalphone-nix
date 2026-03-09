@@ -4,6 +4,7 @@
 let
   buildInputs = with pkgs; [
     alsa-utils
+    ncurses
     openssl
     opusTools
     qrencode
